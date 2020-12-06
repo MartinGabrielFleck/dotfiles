@@ -1,0 +1,240 @@
+# b's sway config
+
+# mod variable / mod key
+set $mod Mod4
+set $mod_b Mod4+space
+set $terminal kitty
+
+# workspace names
+set $ws1 "1-sh"
+set $ws2 "2-txt"
+set $ws3 "3-com"
+set $ws4 "4"
+set $ws5 "5"
+#
+set $ws10 "10-web"
+set $ws9 "9"
+set $ws8 "8"
+set $ws7 "7"
+set $ws6 "6"
+# default screens
+workspace $ws1 output LVDS-1
+workspace $ws2 output LVDS-1
+workspace $ws3 output LVDS-1
+workspace $ws4 output LVDS-1
+workspace $ws5 output LVDS-1
+#
+workspace $ws10 output VGA-1 LVDS-1
+workspace $ws9 output VGA-1 LVDS-1
+workspace $ws8 output VGA-1 LVDS-1
+workspace $ws7 output VGA-1 LVDS-1
+workspace $ws6 output VGA-1 LVDS-1
+
+font pango:Anonymous Pro 8
+
+# status bar
+bar swaybar_command waybar
+
+# Use Mouse+$mod to drag floating windows to their wanted position
+floating_modifier $mod
+
+
+### keybindings
+## start applications
+bindsym $mod+Return exec $terminal # alternative
+bindsym $mod+d exec bemenu-run
+# Note: $mod_b+KEY must be set before $mod+KEY 
+bindsym $mod_b+w exec $terminal -e nmtui
+bindsym $mod_b+b exec qutebrowser
+bindsym $mod_b+n exec chromium
+bindsym $mod_b+e exec pcmanfm
+bindsym $mod_b+f exec /home/b/Zeug/firefox/firefox https://www.facebook.com/
+bindsym $mod_b+g exec gvim -X
+# -X stops gvim to try to connect to an X-server. Otherwise on wayland, sometimes a gray window is enountered on startup
+bindsym $mod_b+c exec firefox https://www.economist.com/
+bindsym $mod_b+k exec keepassxc
+bindsym $mod_b+s exec signal-desktop
+bindsym $mod_b+m exec thunderbird
+bindsym $mod_b+j exec jupyter-lab
+bindsym $mod_b+p exec /home/b/Wolfram/Mathematica/12.1/Executables/mathematica
+bindsym $mod_b+v exec virtualbox
+bindsym $mod_b+z exec /home/b/Zotero_linux-x86_64/zotero
+bindsym $mod+Print exec grim screenshot.png
+## move focused window
+bindsym $mod+Shift+h move left
+bindsym $mod+Shift+j move down
+bindsym $mod+Shift+k move up
+bindsym $mod+Shift+l move right
+bindsym $mod+Shift+g move container to output left
+bindsym $mod+Shift+semicolon move container to output right
+# move focused container to workspace
+bindsym $mod+Shift+1 move container to workspace $ws1
+bindsym $mod+Shift+2 move container to workspace $ws2
+bindsym $mod+Shift+3 move container to workspace $ws3
+bindsym $mod+Shift+4 move container to workspace $ws4
+bindsym $mod+Shift+5 move container to workspace $ws5
+bindsym $mod+Shift+6 move container to workspace $ws6
+bindsym $mod+Shift+7 move container to workspace $ws7
+bindsym $mod+Shift+8 move container to workspace $ws8
+bindsym $mod+Shift+9 move container to workspace $ws9
+bindsym $mod+Shift+0 move container to workspace $ws10
+#
+## change container layout (tabbed, toggle split or stacking (vertical tabs))
+bindsym $mod+i layout tabbed
+bindsym $mod+u layout toggle split
+bindsym $mod+f fullscreen
+#
+## split windows
+bindsym $mod+backslash split h
+bindsym $mod+minus split v
+#
+## reload the configuration file
+bindsym Mod4+Shift+c reload
+#
+## Pulse Audio controls
+bindsym XF86AudioMute exec --no-startup-id pactl set-sink-mute 0 toggle # mute sound
+bindsym XF86AudioMicMute exec --no-startup-id pactl set-source-mute 1 toggle # mic mute
+bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume 0 -5% #decrease sound volume
+bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume 0 +5% #increase sound volume
+bindsym Control+XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume 0 -1% #decrease sound volume
+bindsym Control+XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume 0 +1% #increase sound volume
+# sometimes sink is 1 instead of 0 !?
+bindsym $mod+XF86AudioMute exec --no-startup-id pactl set-sink-mute 1 toggle # mute sound
+bindsym $mod+XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume 1 -5% #decrease sound volume
+bindsym $mod+XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume 1 +5% #increase sound volume
+bindsym $mod+Control+XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume 1 -1% #decrease sound volume
+bindsym $mod+Control+XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume 1 +1% #increase sound volume
+#
+## switch to workspace
+bindsym $mod+1 workspace $ws1
+bindsym $mod+2 workspace $ws2
+bindsym $mod+3 workspace $ws3
+bindsym $mod+4 workspace $ws4
+bindsym $mod+5 workspace $ws5
+bindsym $mod+6 workspace $ws6
+bindsym $mod+7 workspace $ws7
+bindsym $mod+8 workspace $ws8
+bindsym $mod+9 workspace $ws9
+bindsym $mod+0 workspace $ws10
+#
+## kill focused window
+bindsym $mod+q kill
+## change focus
+bindsym $mod+h focus left
+bindsym $mod+j focus down
+bindsym $mod+k focus up
+bindsym $mod+l focus right
+bindsym $mod+g focus output LVDS-1
+bindsym $mod+semicolon focus output VGA-1
+bindsym $mod+a focus parent
+bindsym $mod+s focus child
+# 
+
+## assign applications to workspaces
+# use xprop to determine x window class or role for x11 applications
+# use 'swaymsg -t get_tree | grep "app_id"' for app_id of wayland applications
+# communication software
+assign [class="Signal"] $ws3 
+for_window [class="Signal"] layout tabbed, focus
+assign [class="Thunderbird"] $ws3
+for_window [class="Thunderbird"] layout tabbed, focus
+# browsers
+assign [app_id="org.qutebrowser.qutebrowser"] $ws10
+for_window [app_id = "org.qutebrowser.qutebrowser"] layout tabbed, focus
+assign [class="Chromium"] $ws10
+for_window [class = "Chromium"] layout tabbed, focus
+assign [class="qutebrowser"] $ws10
+for_window [class = "qutebrowser"] layout tabbed, focus
+assign [class="firefox"] $ws10
+for_window [class = "firefox"] layout tabbed, focus
+assign [class="Midori"] $ws10
+for_window [class = "Midori"] layout tabbed, focus
+# terminals
+assign [app_id="kitty"] $ws1
+for_window [app_id="kitty"] layout tabbed, focus
+assign [app_id="Alacritty"] $ws1
+for_window [app_id="Alacritty"] layout tabbed, focus
+# editors
+assign [class="Gvim"] $ws2
+for_window [class="Gvim"] layout tabbed, focus
+# pdf
+assign [class="Evince"] $ws9
+for_window [class="Evince"] layout tabbed
+assign [class="MuPDF"] $ws9
+for_window [class="MuPDF"] layout tabbed
+assign [app_id="org.pwmt.zathura"] $ws9
+for_window [app_id="org.pwmt.zathura"] layout tabbed
+# Nextcloud
+#for_window [app_id="com.nextcloud.desktopclient.nextcloud"] floating
+
+# autostart
+# use exec_always for always restarting with i3
+exec --no-startup-id udiskie
+exec --no-startup-id nextcloud
+# exec --no-startup-id redshift -l 47.6603:9.1756 
+
+## misc
+mouse_warping none 
+focus_follows_mouse no
+
+## sway stuff
+set $bgColor "#070707"
+output LVDS-1 pos 0 0 res 1366x768 background $bgColor solid_color
+output VGA-1 pos 1366 0 res 1920x1080 background $bgColor solid_color
+#
+# hide mouse cursor (ms)
+seat * hide_cursor 2000
+#
+
+# color scheme
+# class                 border  bground text    indicator child_border
+client.focused          #424242 #555555 #FFFFFF #2E9EF4   #424242
+client.focused_inactive #333333 #424242 #888888 #484E50   #5F676A
+client.unfocused        #333333 #222222 #888888 #292D2E   #222222
+client.urgent           #2F343A #900000 #FFFFFF #900000   #900000
+client.placeholder      #000000 #0C0C0C #FFFFFF #000000   #0C0C0C
+
+client.background       #FFFFFF
+
+#
+# wayland Umlaute:
+input type:keyboard xkb_layout us-german-umlaut
+#
+## Screen locking:
+set $lockScreen 'swaylock -f -e -c 000000 --inside-color 000000b3 -s fill'
+bindsym --release Control+$mod+l exec $lockScreen
+# lock screen on idle and after suspsend:
+exec swayidle -w \
+         timeout 540 $lockScreen \
+         timeout 600 'swaymsg "output * dpms off"' \
+              resume 'swaymsg "output * dpms on"' \
+         before-sleep $lockScreen \
+         lock $lockScreen
+
+## additional input modes:
+# window resize mode:
+mode "resize" {
+        bindsym Shift+k resize grow height 10 px or 10 ppt
+        bindsym Shift+j resize shrink height 10 px or 10 ppt
+        bindsym j resize shrink width 10 px or 10 ppt
+        bindsym k resize grow width 10 px or 10 ppt
+
+        # back to normal: Enter or Escape or $mod+r
+        bindsym Return mode "default"
+        bindsym Escape mode "default"
+        bindsym $mod+r mode "default"
+}
+bindsym $mod+r mode "resize"
+# systemctl mode:
+set $mode_system System (s)uspend, (r)eboot, (p)oweroff, e(x)it sway
+mode "$mode_system" {
+    bindsym s exec --no-startup-id systemctl suspend, mode "default"
+    bindsym r exec --no-startup-id systemctl reboot, mode "default"
+    bindsym p exec --no-startup-id systemctl poweroff, mode "default"
+    bindsym x exec --no-startup-id swaymsg exit, mode "default"
+    # back to normal: Enter or Escape
+    bindsym Return mode "default"
+    bindsym Escape mode "default"
+}
+bindsym $mod+F12 mode "$mode_system"
+
